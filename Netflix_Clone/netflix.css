@@ -1,0 +1,99 @@
+/* reset */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#000; color:#fff; font-family: "Poppins", system-ui, Arial, sans-serif; line-height:1.35; }
+
+/* navbar */
+.navbar { position: absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; padding:18px 36px; z-index:60; }
+.brand__logo { width:140px; display:block; }
+.navbar__nav__items { display:flex; gap:12px; align-items:center; }
+.dropdown__container { border:1px solid rgba(255,255,255,0.18); padding:8px 10px; border-radius:6px; background: rgba(0,0,0,0.35); color:#fff; }
+.signin__button { background:#e50914; border:1px solid #e50914; color:#fff; padding:8px 14px; border-radius:6px; cursor:pointer; }
+
+/* hero */
+.hero__bg__image__container { height:80vh; width:100%; overflow:hidden; position:relative; }
+.hero__bg__image { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.45); transform: scale(1.02); }
+.hero__bg__overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 40%); pointer-events:none; }
+
+.hero__card { position:absolute; z-index:40; left:50%; top:52%; transform:translate(-50%,-50%); text-align:center; width:92%; max-width:980px; padding:1rem; color:#fff; }
+.hero__title { font-size:3.2rem; font-weight:700; color:#fff; letter-spacing:-1px; margin-bottom:8px; text-shadow:0 6px 18px rgba(0,0,0,0.6); }
+.hero__subtitle { color:#e6e6e6; margin-top:6px; font-size:1.05rem; }
+.hero__description { color:#d0d0d0; margin-top:8px; }
+
+/* BIG email bar like Netflix */
+.hero-email-form { margin-top:22px; display:flex; justify-content:center; gap:12px; align-items:center; flex-wrap:wrap; }
+.hero-email-input {
+  width:640px; max-width:calc(100% - 160px);
+  background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.08);
+  color:#fff; padding:18px 16px; border-radius:4px; font-size:16px;
+  outline:none;
+}
+.hero-email-input::placeholder { color:#bdbdbd; }
+.hero-get-button {
+  background:#e50914; border:1px solid #e50914; color:#fff; padding:16px 22px; border-radius:4px; font-weight:600; cursor:pointer;
+  box-shadow: 0 6px 18px rgba(233,9,20,0.12);
+}
+
+/* controls */
+.controls { padding:14px 20px; background:#050505; border-bottom:1px solid rgba(255,255,255,0.02); }
+.controls-inner { max-width:1200px; margin:0 auto; display:flex; gap:10px; justify-content:flex-end; align-items:center; }
+
+/* rows */
+.rows-container { padding:22px 6px; max-width:1300px; margin:0 auto 20px; }
+.row { margin:18px 0; }
+.row-title { font-size:1.25rem; margin:0 6px 12px; color:#fff; }
+.row-inner { display:flex; gap:12px; overflow-x:auto; padding:8px; scrollbar-width:thin; }
+.row-inner::-webkit-scrollbar { height:10px; }
+.row-inner::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:8px; }
+
+/* slide cards */
+.slide { min-width:150px; max-width:150px; flex:0 0 auto; border-radius:8px; overflow:hidden; background:#111; position:relative; cursor:pointer; transition: transform .18s, box-shadow .18s; }
+.slide img { width:100%; height:225px; object-fit:cover; display:block; }
+.slide:hover { transform: translateY(-8px); box-shadow:0 16px 40px rgba(0,0,0,0.7); }
+.slide .slide-title { position:absolute; left:8px; bottom:8px; color:#fff; font-size:12px; text-shadow:0 6px 12px rgba(0,0,0,0.6); width:calc(100% - 16px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* search grid */
+.movies__container { padding:18px; background:#070707; }
+.movies__grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); max-width:1200px; margin:0 auto; }
+
+/* modal */
+.movie-modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:9999; }
+.movie-modal[aria-hidden="false"] { display:flex; }
+.movie-modal__backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.78); backdrop-filter: blur(3px); }
+.movie-modal__content { position:relative; z-index:10; max-width:1000px; width:95%; background:#111; padding:18px; border-radius:8px; color:#fff; box-shadow:0 28px 80px rgba(0,0,0,0.8); }
+.modal-close { position:absolute; right:12px; top:12px; background:transparent; color:#fff; border:none; font-size:20px; cursor:pointer; }
+.modal-video iframe { width:100%; height:520px; border:none; margin-top:12px; }
+.modal-meta { margin-top:10px; color:#ddd; font-size:14px; }
+
+/* FAQ */
+.FAQ__list__container { padding:28px 20px; background:#070707; }
+.FAQ__heading { text-align:center; font-size:2rem; margin-bottom:18px; color:#fff; }
+.FAQ__accordian { width:100%; max-width:1000px; margin:8px auto; }
+.FAQ__title { width:100%; background:#222; color:#fff; border:none; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-radius:6px; }
+.FAQ__visible { background:#222; overflow:hidden; max-height:0; transition:max-height .35s ease; color:#ddd; }
+
+/* footer */
+.site-footer { background: #0b0b0b; color:#9a9a9a; padding:28px 20px; border-top:6px solid #202020; margin-top:28px; }
+.footer-inner { max-width:1200px; margin:0 auto; }
+.footer-top { margin-bottom:18px; }
+.footer-question { color:#bdbdbd; font-size:14px; margin-bottom:10px; }
+.footer-links-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:18px; margin-bottom:18px; }
+.footer-links-grid .col a { display:block; color:#9a9a9a; text-decoration:none; padding:6px 0; font-size:14px; }
+.footer-links-grid .col a:hover { text-decoration:underline; color:#fff; }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.lang-btn { background:transparent; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:8px 12px; border-radius:6px; cursor:pointer; }
+copyright { color:#7a7a7a; }
+
+/* responsive */
+@media (max-width:880px) {
+  .hero__title { font-size:2rem; }
+  .hero-email-input { width:100%; max-width:100%; }
+  .hero-email-form { flex-direction:column; gap:10px; align-items:stretch; }
+  .footer-links-grid { grid-template-columns:repeat(2,1fr); }
+  .slide { min-width:130px; max-width:130px; }
+  .slide img { height:190px; }
+  .modal-video iframe { height:260px; }
+}
+@media (max-width:480px) {
+  .hero__title { font-size:1.6rem; }
+  .footer-links-grid { grid-template-columns:1fr; }
+}
