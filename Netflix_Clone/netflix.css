@@ -97,3 +97,16 @@ copyright { color:#7a7a7a; }
   .hero__title { font-size:1.6rem; }
   .footer-links-grid { grid-template-columns:1fr; }
 }
+.controls { padding:14px 20px; background:#050505; border-bottom:1px solid rgba(255,255,255,0.02); }
+.controls-inner { max-width:1200px; margin:0 auto; display:flex; gap:10px; justify-content:flex-end; align-items:center; flex-wrap:wrap; }
+.search-input { padding:10px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:#fff; min-width:260px; }
+.btn-small { padding:8px 12px; border-radius:6px; background:#333; color:#fff; border:none; cursor:pointer; }
+.btn-small:hover { background:#444; }
+
+
+.section__heading {
+    font-size: 1.8rem;
+    margin: 10px 0 12px;
+    color: #fff;
+    padding-left: 20px;
+}

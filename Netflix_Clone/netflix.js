@@ -23,6 +23,20 @@ const rowsConfig = [
   { key: "upcoming", title: "Upcoming", endpoint: () => `${TMDB_BASE}/movie/upcoming?api_key=${TMDB_API_KEY}&language=en-US&page=1` },
 ];
 
+// ---------- UI element references (assigned on DOMContentLoaded) ----------
+let moviesGrid = null;
+let loadMoreBtn = null;
+let searchInput = null;
+let searchClear = null;
+let searchButton = null;
+let modal = null;
+let modalBackdrop = null;
+let modalTitle = null;
+let modalOverview = null;
+let modalVideo = null;
+let modalMeta = null;
+let modalClose = null;
+
 // ---------- render row (horizontal) ----------
 async function loadRow(config) {
   const container = document.getElementById(`row-${config.key}`);
@@ -66,11 +80,11 @@ function loadAllRows() {
 }
 
 // ---------- search + grid ----------
+
 let currentPage = 1;
 let currentQuery = "";
-const moviesGrid = document.getElementById("movies-grid");
-const loadMoreBtn = document.getElementById("load-more");
 
+// fetchMovies works for both search and popular (or other queries)
 async function fetchMovies(page = 1, query = "") {
   if (!TMDB_API_KEY || TMDB_API_KEY.includes("YOUR_TMDB")) {
     console.warn("TMDB API key missing.");
@@ -89,6 +103,7 @@ async function fetchMovies(page = 1, query = "") {
 }
 
 function renderMovies(movies, append = false) {
+  if (!moviesGrid) return;
   if (!append) moviesGrid.innerHTML = "";
   if (!movies || movies.length === 0) {
     if (!append) moviesGrid.innerHTML = `<p style="color:#ccc">No movies found.</p>`;
@@ -119,6 +134,7 @@ function renderMovies(movies, append = false) {
 }
 
 async function showInitialPopular() {
+  if (!moviesGrid) return;
   currentPage = 1;
   currentQuery = "";
   moviesGrid.innerHTML = `<p style="color:#999">Loading movies...</p>`;
@@ -126,53 +142,23 @@ async function showInitialPopular() {
   renderMovies(movies, false);
 }
 
-loadMoreBtn.addEventListener("click", async () => {
-  currentPage++;
-  const movies = await fetchMovies(currentPage, currentQuery);
-  renderMovies(movies, true);
-});
-
-const searchInput = document.getElementById("search-input");
-const searchClear = document.getElementById("search-clear");
-searchInput.addEventListener("keydown", async (e) => {
-  if (e.key === "Enter") {
-    currentQuery = searchInput.value.trim();
-    currentPage = 1;
-    moviesGrid.innerHTML = `<p style="color:#999">Searching...</p>`;
-    const movies = await fetchMovies(currentPage, currentQuery);
-    renderMovies(movies, false);
-  }
-});
-searchClear.addEventListener("click", () => {
-  searchInput.value = "";
-  currentQuery = "";
-  showInitialPopular();
-});
-
 // ---------- modal & trailer ----------
-const modal = document.getElementById("movie-modal");
-const modalBackdrop = document.getElementById("movie-modal-backdrop");
-const modalTitle = document.getElementById("modal-title");
-const modalOverview = document.getElementById("modal-overview");
-const modalVideo = document.getElementById("modal-video");
-const modalMeta = document.getElementById("modal-meta");
-const modalClose = document.getElementById("modal-close");
-
 async function openMovieModal(movieId) {
+  if (!modal) return;
   modal.setAttribute("aria-hidden", "false");
-  modalTitle.textContent = "Loading...";
-  modalOverview.textContent = "";
-  modalVideo.innerHTML = "";
-  modalMeta.textContent = "";
+  if (modalTitle) modalTitle.textContent = "Loading...";
+  if (modalOverview) modalOverview.textContent = "";
+  if (modalVideo) modalVideo.innerHTML = "";
+  if (modalMeta) modalMeta.textContent = "";
 
   // details
   const detail = await fetchJSON(`${TMDB_BASE}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=en-US`);
   if (detail) {
-    modalTitle.textContent = detail.title || "Movie";
-    modalOverview.textContent = detail.overview || "";
-    modalMeta.innerHTML = `<strong>Release:</strong> ${detail.release_date || "N/A"} · <strong>Rating:</strong> ${detail.vote_average || "N/A"}`;
+    if (modalTitle) modalTitle.textContent = detail.title || "Movie";
+    if (modalOverview) modalOverview.textContent = detail.overview || "";
+    if (modalMeta) modalMeta.innerHTML = `<strong>Release:</strong> ${detail.release_date || "N/A"} · <strong>Rating:</strong> ${detail.vote_average || "N/A"}`;
   } else {
-    modalTitle.textContent = "Unable to load details";
+    if (modalTitle) modalTitle.textContent = "Unable to load details";
   }
 
   // videos
@@ -180,26 +166,22 @@ async function openMovieModal(movieId) {
   if (videoData && videoData.results && videoData.results.length > 0) {
     const trailer = videoData.results.find(v => v.site === "YouTube" && v.type === "Trailer") ||
                     videoData.results.find(v => v.site === "YouTube");
-    if (trailer) {
+    if (trailer && modalVideo) {
       const key = trailer.key;
-      // muted autoplay would require user interaction; keep normal embed
       modalVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${key}" title="Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-    } else {
+    } else if (modalVideo) {
       modalVideo.innerHTML = `<p style="color:#ddd">Trailer not available (non-YouTube video).</p>`;
     }
-  } else {
+  } else if (modalVideo) {
     modalVideo.innerHTML = `<p style="color:#ddd">Trailer not available.</p>`;
   }
 }
 
 function closeModal() {
+  if (!modal) return;
   modal.setAttribute("aria-hidden", "true");
-  modalVideo.innerHTML = "";
+  if (modalVideo) modalVideo.innerHTML = "";
 }
-
-modalClose.addEventListener("click", closeModal);
-modalBackdrop.addEventListener("click", closeModal);
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
 // ---------- FAQ accordion ----------
 document.addEventListener("click", (e) => {
@@ -217,15 +199,85 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// ---------- bootstrap ----------
+// ---------- bootstrap / wire up DOM elements ----------
 document.addEventListener("DOMContentLoaded", () => {
+  // assign DOM elements safely
+  moviesGrid = document.getElementById("movies-grid");
+  loadMoreBtn = document.getElementById("load-more");
+  searchInput = document.getElementById("search-input");
+  searchClear = document.getElementById("search-clear");
+  searchButton = document.getElementById("search-button");
+
+  modal = document.getElementById("movie-modal");
+  modalBackdrop = document.getElementById("movie-modal-backdrop");
+  modalTitle = document.getElementById("modal-title");
+  modalOverview = document.getElementById("modal-overview");
+  modalVideo = document.getElementById("modal-video");
+  modalMeta = document.getElementById("modal-meta");
+  modalClose = document.getElementById("modal-close");
+
+  // load rows and initial popular
   loadAllRows();
   showInitialPopular();
 
+  // load more behavior
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", async () => {
+      currentPage++;
+      const movies = await fetchMovies(currentPage, currentQuery);
+      renderMovies(movies, true);
+    });
+  }
+
+  // Search: Button click
+  if (searchButton) {
+    searchButton.addEventListener("click", async () => {
+      const val = searchInput ? searchInput.value.trim() : "";
+      if (!val) return;
+      currentQuery = val;
+      currentPage = 1;
+      if (moviesGrid) moviesGrid.innerHTML = `<p style="color:#999">Searching for "${val}"...</p>`;
+      const movies = await fetchMovies(currentPage, currentQuery);
+      renderMovies(movies, false);
+    });
+  }
+
+  // Search: Enter key
+  if (searchInput) {
+    searchInput.addEventListener("keydown", async (e) => {
+      if (e.key === "Enter") {
+        const val = searchInput.value.trim();
+        if (!val) return;
+        currentQuery = val;
+        currentPage = 1;
+        if (moviesGrid) moviesGrid.innerHTML = `<p style="color:#999">Searching for "${val}"...</p>`;
+        const movies = await fetchMovies(currentPage, currentQuery);
+        renderMovies(movies, false);
+      }
+    });
+  }
+
+  // Clear search
+  if (searchClear) {
+    searchClear.addEventListener("click", () => {
+      if (searchInput) searchInput.value = "";
+      currentQuery = "";
+      currentPage = 1;
+      showInitialPopular();
+    });
+  }
+
+  // modal close behavior
+  if (modalClose) modalClose.addEventListener("click", closeModal);
+  if (modalBackdrop) modalBackdrop.addEventListener("click", closeModal);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+  // email button demo handler (if exists)
   const getBtn = document.getElementById("get-started");
   if (getBtn) {
     getBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value;
+      const emailInput = document.getElementById("email");
+      const email = emailInput ? emailInput.value : "";
       if (!email) { alert("Please enter an email address"); return; }
       alert("Thanks! We'll send details to: " + email);
     });

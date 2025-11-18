@@ -50,6 +50,24 @@
         </form>
       </div>
     </section>
+<!-- 🔍 SEARCH BAR -->
+<section class="controls">
+  <div class="controls-inner">
+    <input id="search-input" class="search-input" placeholder="Search any movie..." />
+    <button id="search-button" class="btn-small">Search</button>
+    <button id="search-clear" class="btn-small">Clear</button>
+  </div>
+</section>
+
+<!-- 🔎 SEARCH RESULTS (THIS WILL SHOW AT TOP) -->
+<section class="movies__container" aria-labelledby="movies-heading">
+  <h2 id="movies-heading" class="section__heading">Search Results</h2>
+  <div id="movies-grid" class="movies__grid"></div>
+
+  <div id="load-more-wrap" class="load-more-wrap">
+    <button id="load-more" class="primary__button">Load More</button>
+  </div>
+</section>
 
     <!-- Controls / Search -->
     <section class="controls">
@@ -156,5 +174,32 @@
       <div id="modal-meta" class="modal-meta"></div>
     </div>
   </div>
+  <div class="controls">
+    <input id="search-input" class="search-input" placeholder="Search any movie..." />
+    <button id="search-button" class="search-btn">Search</button>
+</div>
+<div class="search-area">
+    <input type="text" id="search-input" placeholder="Search any movie..." />
+    <button id="search-button">Search</button>
+</div>
+<!-- --- SEARCH BAR (paste here) --- -->
+<section class="controls">
+  <div class="controls-inner">
+    <input id="search-input" class="search-input" placeholder="Search movies (type and press Enter or click Search)" />
+    <button id="search-button" class="btn-small">Search</button>
+    <button id="search-clear" class="btn-small">Clear</button>
+  </div>
+</section>
+
+<!-- Search results grid (ensure this exists once in page) -->
+<section class="movies__container" aria-labelledby="movies-heading">
+  <h2 id="movies-heading" class="section__heading">Search Results</h2>
+  <div id="movies-grid" class="movies__grid"></div>
+  <div id="load-more-wrap" class="load-more-wrap">
+    <button id="load-more" class="primary__button">Load More</button>
+  </div>
+</section>
+<!-- --- end search bar --- -->
+
 </body>
 </html>
